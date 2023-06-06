@@ -13,7 +13,7 @@ y1 = 250
 y2 = 1008
 
 # Creamos un kernel basado en una matriz de 15x15
-kernel = np.ones((20, 20), np.uint8)
+kernel = np.ones((22, 22), np.uint8)
 
 #Leemos la imagen en concreto
 img = cv2.imread("samples/IMG_3270.jpg")
