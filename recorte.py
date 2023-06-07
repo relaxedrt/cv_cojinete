@@ -65,7 +65,9 @@ if len(contornos1) == 3:
     cv2.line(recorte, posiciones[0], posiciones[1], (0,255,0), 2)
     #Escribimos la distancia
     #cv2.putText(recorte, "yes", ((posiciones[0][0] / posiciones[1][0]) + 3, (posiciones[0][1] / posiciones[1][1])), 1, 1, (0,255,0), 2)
-
+else:
+    print("La deteccion ha fallado.")
+    print(f"Se han encontrado {len(contornos1)} contornos.")
 #La mostramos por pantalla
 cv2.imshow('Imagen', recorte)
 cv2.waitKey(0)
