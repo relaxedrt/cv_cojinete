@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 
 #Seleccionamos los vertices del recorte
-x1 = 200
+x1 = 190
 x2 = 300
 y1 = 250
 y2 = 960
@@ -16,7 +16,7 @@ kernel_erode = np.ones((9, 9), np.uint8)
 kernel_dilate = np.ones((10, 10), np.uint8)
 
 #Leemos la imagen en concreto
-img = cv2.imread("samples/IMG_3270.jpg")
+img = cv2.imread("samples/IMG_3274.jpg")
 
 #Escalamos la imagen
 fde = 0.25
@@ -42,32 +42,43 @@ _, mask = cv2.threshold(img_dilation, 15, 255, cv2.THRESH_BINARY)
 #Buscamos los contornos
 contornos1,hierarchy1 = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
-if len(contornos1) == 3:
+if len(contornos1) > 1:
     #Hay el numero correcto de taladros
-    print("Pieza con el número correcto de taladros.")
     for c in contornos1:
         #Calculamos la posición del taladro
         epsilon = 0.01*cv2.arcLength(c, True)
         approx = cv2.approxPolyDP(c, epsilon, True)
         x, y, w, h = cv2.boundingRect(approx)
-        #Solo si tiene mas de 4 lados lo usamos como taladro, asi nos quitamos bordes
-        if len(approx) > 4:
-            cv2.putText(recorte, "Taladro", (x, y -5), 1, 1, (0,255,0), 2)
+        #Solo si tiene mas de 10 lados lo usamos como taladro, asi nos quitamos bordes
+        if len(approx) > 10:
+            M = cv2.moments(c)
+            if M['m00'] != 0:
+                cx = int(M['m10']/M['m00'])
+                cy = int(M['m01']/M['m00'])
+            cv2.putText(recorte, "Taladro", (x, y -5), 1, 1, (0,0,0), 2)
             #Dibujamos los contronos como prueba
             cv2.drawContours(recorte, c, -1, (0,255,0), 2)
             #Guardamos la coordenada x e y de la esquina superior izquierda
-            posiciones.append([ x, y])
+            posiciones.append([ cx, cy])
 
-    #Calculamos la distancia entre los dos puntos
-    d = np.sqrt(((posiciones[0][0] - posiciones[1][0]) * (posiciones[0][0] - posiciones[1][0])) + ((posiciones[0][1] - posiciones[1][1]) * (posiciones[0][1] - posiciones[1][1])))
-    print(f"La pieza tiene {d} pixels entre centros")
-    #Dibujamos la linea
-    cv2.line(recorte, posiciones[0], posiciones[1], (0,255,0), 2)
-    #Escribimos la distancia
-    #cv2.putText(recorte, "yes", ((posiciones[0][0] / posiciones[1][0]) + 3, (posiciones[0][1] / posiciones[1][1])), 1, 1, (0,255,0), 2)
+    #Comprobamos que haya habido 2 circulos
+    if len(posiciones) == 2:
+        print("Pieza con el número correcto de taladros.")
+        #Calculamos la distancia entre los dos puntos
+        d = np.sqrt(((posiciones[0][0] - posiciones[1][0]) * (posiciones[0][0] - posiciones[1][0])) + ((posiciones[0][1] - posiciones[1][1]) * (posiciones[0][1] - posiciones[1][1])))
+        print(f"La pieza tiene {d} pixels entre centros")
+        #Dibujamos la linea
+        cv2.line(recorte, posiciones[0], posiciones[1], (0,255,0), 2)
+        #Escribimos la distancia
+        midx = (posiciones[0][0] / posiciones[1][0]) + 3
+        midy = (posiciones[0][1] / posiciones[1][1])
+        #cv2.putText(recorte, "", (midx, midy), 1, 1, (0,0,0), 2)
+    else:
+        print("La deteccion ha fallado.")
+        print(f"No se han encontrado taladros.")
 else:
     print("La deteccion ha fallado.")
-    print(f"Se han encontrado {len(contornos1)} contornos.")
+    print(f"No se han encontrado taladros.")
 #La mostramos por pantalla
 cv2.imshow('Imagen', recorte)
 cv2.waitKey(0)
