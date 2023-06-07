@@ -21,7 +21,7 @@ kernel_erode = np.ones((9, 9), np.uint8)
 kernel_dilate = np.ones((10, 10), np.uint8)
 
 #Leemos la imagen en concreto
-img = cv2.imread("samples/IMG_3274.jpg")
+img = cv2.imread("samples/NOOK1AGUJERO.jpg")
 
 #Escalamos la imagen
 fde = 0.25
@@ -71,21 +71,23 @@ if len(contornos1) > 1:
         print("Pieza con el número correcto de taladros.")
         #Calculamos la distancia entre los dos puntos
         d = np.sqrt(((posiciones[0][0] - posiciones[1][0]) * (posiciones[0][0] - posiciones[1][0])) + ((posiciones[0][1] - posiciones[1][1]) * (posiciones[0][1] - posiciones[1][1])))
-        #Dibujamos la linea
-        cv2.line(recorte, posiciones[0], posiciones[1], (0,255,0), 2)
         #Escribimos la distancia
         midx = (posiciones[0][0] / posiciones[1][0]) + 3
         midy = (posiciones[0][1] / posiciones[1][1])
         #cv2.putText(recorte, "", (midx, midy), 1, 1, (0,0,0), 2)
         if ((d/pxmm) > (distok + umbral_dist)) or ((d/pxmm) < (distok - umbral_dist)):
+            #Dibujamos la linea
+            cv2.line(recorte, posiciones[0], posiciones[1], (0,0,255), 2)
             print("Medición entre centros erronea.")
             print(f"La pieza tiene {d/pxmm} pixels entre centros.")
         else :
+            #Dibujamos la linea
+            cv2.line(recorte, posiciones[0], posiciones[1], (0,255,0), 2)
             print("Medición entre centros correcta.")
             print(f"La pieza tiene {d/pxmm} pixels entre centros.")
     else:
         print("La deteccion ha fallado.")
-        print(f"No se han encontrado taladros.")
+        print(f"No se han encontrado la cantidad de taladros correcta.")
 else:
     print("La deteccion ha fallado.")
 #La mostramos por pantalla
