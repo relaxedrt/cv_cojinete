@@ -1,0 +1,9 @@
+Para que la pieza sea aceptada deberá constar de:
+-Dos taladros 
+-Distancia entre taladros de 116mm con tolerancia de una decima
+
+
+-Si la distancia entre dos taladros en pixeles es 578px
+
+578-116
+x-1
