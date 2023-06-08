@@ -21,7 +21,7 @@ kernel_erode = np.ones((9, 9), np.uint8)
 kernel_dilate = np.ones((10, 10), np.uint8)
 
 #Leemos la imagen en concreto
-img = cv2.imread("samples/NOOK1AGUJERO.jpg")
+img = cv2.imread("samples/IMG_3280..jpg")
 
 #Escalamos la imagen
 fde = 0.25
