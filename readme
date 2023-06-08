@@ -1,9 +1,8 @@
 Para que la pieza sea aceptada deberá constar de:
 -Dos taladros 
 -Distancia entre taladros de 116mm con tolerancia de una decima
-
+-Anchura de 28.2mm con tolerancia de dos decimas
 
 Si la distancia entre dos taladros en pixeles es 578px
-
 578.00px-116mm
-4.98px-1mm
+4.9913px-1mm
